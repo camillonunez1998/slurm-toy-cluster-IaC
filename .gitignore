@@ -1,0 +1,41 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+!terraform.tfvars.example
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Imagenes y discos (pesados, no van en git)
+*.qcow2
+*.iso
+*.img
+*.raw
+
+# Ansible
+*.retry
+.vault_pass
+ansible/inventory/generated*
+ansible/inventory.ini
+
+# Secretos
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+.env
+
+# Editores y sistema
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
