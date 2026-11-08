@@ -15,7 +15,7 @@ Infrastructure as code for a toy Slurm cluster on KVM/QEMU.
 
 - OS: RHEL 10.2 (installed from the ISO with kickstart).
 - Static IPs on a dedicated libvirt network.
-- Boots into `multi-user.target` by default; desktop is optional.
+- Boots into `multi-user.target`; no desktop installed.
 
 ## Prerequisites
 
