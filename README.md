@@ -32,6 +32,20 @@ To install the tools on RHEL:
 
 Log out and back in afterwards so the `libvirt` group membership takes effect.
 
+- **The nodes must be registered with Red Hat** (`subscription-manager register`) before running the
+  Ansible playbook. The playbook assumes the BaseOS and AppStream repositories are available on every node;
+  it does not handle subscriptions.
+
+## Accessing the nodes
+
+Each VM has an administrator account created by cloud-init (`cloud-user` by default, see the `admin_user`
+variable), with passwordless sudo and SSH key authentication only. The authorized key is read from
+`ssh_public_key_path` (default `~/.ssh/toy-cluster.pub`):
+
+```bash
+ssh -i ~/.ssh/toy-cluster cloud-user@192.168.100.10   # controller
+```
+
 ## VM template
 
 The VMs are cloned from a template built once from the ISO with kickstart:
