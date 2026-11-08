@@ -1,0 +1,2 @@
+cluster_domain: slurm-toy
+cluster_interface: eth0

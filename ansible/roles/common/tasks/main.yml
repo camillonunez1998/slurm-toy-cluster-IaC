@@ -1,0 +1,30 @@
+- name: Stop cloud-init from rewriting /etc/hosts at every boot
+  ansible.builtin.copy:
+    dest: /etc/cloud/cloud.cfg.d/99-manage-hosts.cfg
+    content: |
+      manage_etc_hosts: false
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Write /etc/hosts with every cluster node
+  ansible.builtin.template:
+    src: hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Trust the cluster network interface in firewalld
+  ansible.posix.firewalld:
+    zone: trusted
+    interface: "{{ cluster_interface }}"
+    permanent: true
+    immediate: true
+    state: enabled
+
+- name: Keep the clock synchronized
+  ansible.builtin.service:
+    name: chronyd
+    state: started
+    enabled: true

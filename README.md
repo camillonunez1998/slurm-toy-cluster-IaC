@@ -56,6 +56,20 @@ The VMs are cloned from a template built once from the ISO with kickstart:
 
 It is idempotent: if the template already exists, it does nothing.
 
+## Configuring the nodes
+
+Install the Ansible collections once, then run the playbook from the `ansible/` directory:
+
+```bash
+cd ansible
+ansible-galaxy collection install -r requirements.yml
+ansible-playbook site.yml
+```
+
+The playbook is idempotent: running it again only changes what differs. The inventory
+(`ansible/inventory/hosts.yml`) uses the fixed node addresses; keep it in sync with the
+`nodes` variable in `terraform/variables.tf`.
+
 ## Terraform state
 
 The Terraform state is stored **outside** the repository, at a fixed per-user path:
