@@ -23,6 +23,9 @@ Infrastructure as code for a toy Slurm cluster on KVM/QEMU.
 - The RHEL 10.2 installation ISO at `/var/lib/libvirt/images/rhel-10.2-x86_64-dvd.iso`
   (override with the `ISO_PATH` environment variable).
 - libvirt/KVM, Terraform and Ansible, and your user in the `libvirt` group.
+- An SSH key pair for the cluster, for example
+  `ssh-keygen -t ed25519 -f ~/.ssh/toy-cluster`. The public key (`~/.ssh/toy-cluster.pub` by default,
+  see the `ssh_public_key_path` variable) is installed on every VM.
 
 To install the tools on RHEL:
 
@@ -36,6 +39,31 @@ Log out and back in afterwards so the `libvirt` group membership takes effect.
   Ansible playbook. The playbook assumes the BaseOS and AppStream repositories are available on every node;
   it does not handle subscriptions.
 
+## Creating the cluster
+
+1. Initialize Terraform (see [Terraform state](#terraform-state)):
+
+   ```bash
+   ./scripts/tf-init.sh
+   ```
+
+2. Create the network, disks and VMs:
+
+   ```bash
+   cd terraform
+   terraform apply
+   ```
+
+   The first run also builds the VM template from the ISO (see [VM template](#vm-template)), which takes
+   several minutes. Later runs reuse it and only apply what changed.
+
+3. Register the three nodes with Red Hat (see Prerequisites).
+
+4. Configure the nodes with Ansible (see [Configuring the nodes](#configuring-the-nodes)).
+
+To remove the VMs, their disks and the network, run `terraform destroy` from the `terraform/` directory.
+The VM template is kept, so the next `terraform apply` is fast.
+
 ## Accessing the nodes
 
 Each VM has an administrator account created by cloud-init (`cloud-user` by default, see the `admin_user`
@@ -48,13 +76,15 @@ ssh -i ~/.ssh/toy-cluster cloud-user@192.168.100.10   # controller
 
 ## VM template
 
-The VMs are cloned from a template built once from the ISO with kickstart:
+The VMs are cloned from a template built once from the ISO with kickstart.
+`terraform apply` builds it automatically when it does not exist. To build it by hand:
 
 ```bash
 ./scripts/build-template.sh
 ```
 
-It is idempotent: if the template already exists, it does nothing.
+It is idempotent: if the template already exists, it does nothing. The VM disks are copy-on-write
+clones of the template, so do not delete the template while the VMs exist.
 
 ## Configuring the nodes
 
