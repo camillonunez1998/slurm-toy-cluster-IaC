@@ -98,13 +98,23 @@ resource "libvirt_volume" "init" {
 resource "libvirt_domain" "node" {
   for_each = var.nodes
 
-  name        = each.key
+  name        = "${var.vm_name_prefix}${each.key}"
   type        = "kvm"
   memory      = each.value.memory
   memory_unit = "MiB"
   vcpu        = each.value.vcpus
   running     = true
   autostart   = true
+
+  # RHEL 10 needs x86-64-v3; the default libvirt CPU model is too old to boot it.
+  cpu = {
+    mode = "host-passthrough"
+  }
+
+  features = {
+    acpi = true
+    apic = {}
+  }
 
   os = {
     type         = "hvm"
@@ -137,6 +147,15 @@ resource "libvirt_domain" "node" {
 
     consoles = [{
       target = { type = "serial", port = 0 }
+    }]
+
+    # Local-only VNC display, handy to watch the boot or use a desktop when enabled.
+    graphics = [{
+      vnc = { auto_port = true, listen = "127.0.0.1" }
+    }]
+
+    videos = [{
+      model = { type = "virtio" }
     }]
   }
 }

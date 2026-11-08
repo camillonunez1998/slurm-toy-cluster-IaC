@@ -96,3 +96,9 @@ variable "ssh_public_key_path" {
   type        = string
   default     = "~/.ssh/toy-cluster.pub"
 }
+
+variable "vm_name_prefix" {
+  description = "Prefix for the libvirt domain names, to avoid clashing with other VMs on the host."
+  type        = string
+  default     = "slurm-"
+}
