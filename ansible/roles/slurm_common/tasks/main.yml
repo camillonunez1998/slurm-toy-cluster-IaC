@@ -1,0 +1,44 @@
+# Slurm is only published in the EPEL "10" branch, not in the 10.2 minor-version
+# streams that the epel-release package selects on RHEL 10.2.
+- name: Configure the EPEL 10 repository
+  ansible.builtin.yum_repository:
+    name: epel-10
+    description: Extra Packages for Enterprise Linux 10 - $basearch
+    baseurl: "{{ epel_baseurl }}"
+    gpgcheck: true
+    gpgkey: "{{ epel_gpgkey }}"
+    enabled: true
+
+# The EPEL packages run the daemons as slurm:slurm but do not create the account.
+- name: Create the slurm group
+  ansible.builtin.group:
+    name: slurm
+    gid: "{{ slurm_gid }}"
+    system: true
+
+- name: Create the slurm user
+  ansible.builtin.user:
+    name: slurm
+    uid: "{{ slurm_uid }}"
+    group: slurm
+    system: true
+    shell: /sbin/nologin
+    home: /var/lib/slurm
+    create_home: false
+
+- name: Install Slurm
+  ansible.builtin.dnf:
+    name: slurm
+    state: present
+
+- name: Install the Slurm configuration
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/etc/slurm/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - slurm.conf
+    - cgroup.conf
+  notify: Restart Slurm daemons

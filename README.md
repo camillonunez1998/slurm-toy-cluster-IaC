@@ -66,6 +66,9 @@ ansible-galaxy collection install -r requirements.yml
 ansible-playbook site.yml
 ```
 
+Slurm is installed from the EPEL 10 repository (it is not shipped with RHEL), which the playbook
+configures on every node.
+
 The playbook is idempotent: running it again only changes what differs. The inventory
 (`ansible/inventory/hosts.yml`) uses the fixed node addresses; keep it in sync with the
 `nodes` variable in `terraform/variables.tf`.

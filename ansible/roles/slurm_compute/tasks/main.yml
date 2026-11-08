@@ -1,0 +1,21 @@
+- name: Install the Slurm node daemon
+  ansible.builtin.dnf:
+    name: slurm-slurmd
+    state: present
+
+- name: Create the Slurm spool and log directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  loop:
+    - /var/spool/slurmd
+    - /var/log/slurm
+
+- name: Start slurmd
+  ansible.builtin.service:
+    name: slurmd
+    state: started
+    enabled: true

@@ -1,0 +1,6 @@
+# try-restart only touches the daemons that are installed and running on the node.
+- name: Restart Slurm daemons
+  ansible.builtin.command:
+    cmd: systemctl try-restart slurmctld.service slurmd.service
+  failed_when: false
+  changed_when: true

@@ -1,2 +1,10 @@
 cluster_domain: slurm-toy
 cluster_interface: eth0
+
+slurm_cluster_name: slurm-toy
+slurm_node_cpus: 2
+slurm_node_memory_mb: 3500
+epel_baseurl: https://dl.fedoraproject.org/pub/epel/10/Everything/$basearch/
+epel_gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-10
+slurm_uid: 1600
+slurm_gid: 1600
