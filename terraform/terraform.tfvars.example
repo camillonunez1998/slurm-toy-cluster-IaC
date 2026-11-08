@@ -1,0 +1,6 @@
+# Copy to terraform.tfvars and adjust. Every value shown here is the default.
+
+# ssh_public_key_path = "~/.ssh/toy-cluster.pub"
+# admin_user          = "cloud-user"
+# iso_path            = "/var/lib/libvirt/images/rhel-10.2-x86_64-dvd.iso"
+# pool_dir            = "/home/vms/slurm-toy"

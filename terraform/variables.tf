@@ -60,3 +60,39 @@ variable "nodes" {
     error_message = "Exactly one node must have the \"controller\" role."
   }
 }
+
+variable "pool_name" {
+  description = "Libvirt storage pool holding the template and the VM disks. Created by scripts/build-template.sh."
+  type        = string
+  default     = "slurm-toy"
+}
+
+variable "pool_dir" {
+  description = "Directory backing the storage pool; VM disks live here."
+  type        = string
+  default     = "/home/vms/slurm-toy"
+}
+
+variable "template_name" {
+  description = "File name of the VM template inside the pool directory."
+  type        = string
+  default     = "rhel-10.2-template.qcow2"
+}
+
+variable "iso_path" {
+  description = "RHEL 10.2 installation ISO used to build the template."
+  type        = string
+  default     = "/var/lib/libvirt/images/rhel-10.2-x86_64-dvd.iso"
+}
+
+variable "admin_user" {
+  description = "Administrator account created on every VM by cloud-init (passwordless sudo, SSH key only)."
+  type        = string
+  default     = "cloud-user"
+}
+
+variable "ssh_public_key_path" {
+  description = "Public SSH key authorized for the administrator account."
+  type        = string
+  default     = "~/.ssh/toy-cluster.pub"
+}
