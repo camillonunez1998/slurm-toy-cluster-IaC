@@ -17,6 +17,31 @@ Infrastructure as code for a toy Slurm cluster on KVM/QEMU.
 - Static IPs on a dedicated libvirt network.
 - Boots into `multi-user.target` by default; desktop is optional.
 
+## Prerequisites
+
+- A RHEL 10 host with hardware virtualization enabled.
+- The RHEL 10.2 installation ISO at `/var/lib/libvirt/images/rhel-10.2-x86_64-dvd.iso`
+  (override with the `ISO_PATH` environment variable).
+- libvirt/KVM, Terraform and Ansible, and your user in the `libvirt` group.
+
+To install the tools on RHEL:
+
+```bash
+./scripts/install-prereqs.sh
+```
+
+Log out and back in afterwards so the `libvirt` group membership takes effect.
+
+## VM template
+
+The VMs are cloned from a template built once from the ISO with kickstart:
+
+```bash
+./scripts/build-template.sh
+```
+
+It is idempotent: if the template already exists, it does nothing.
+
 ## Status
 
 Work in progress. This repository only provisions the infrastructure; any work built on top of it belongs in a separate repository.
