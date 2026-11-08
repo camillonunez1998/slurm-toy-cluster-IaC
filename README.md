@@ -42,6 +42,23 @@ The VMs are cloned from a template built once from the ISO with kickstart:
 
 It is idempotent: if the template already exists, it does nothing.
 
+## Terraform state
+
+The Terraform state is stored **outside** the repository, at a fixed per-user path:
+
+```
+~/.local/share/slurm-toy/terraform.tfstate
+```
+
+This way, deleting and re-cloning the repository does not make Terraform forget the existing VMs.
+Always initialize with the helper script instead of calling `terraform init` directly:
+
+```bash
+./scripts/tf-init.sh
+```
+
+To use another directory, set `SLURM_TOY_STATE_DIR` before running it.
+
 ## Status
 
 Work in progress. This repository only provisions the infrastructure; any work built on top of it belongs in a separate repository.
